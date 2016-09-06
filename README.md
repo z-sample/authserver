@@ -19,3 +19,11 @@ running on other ports on the root resource). OAuth2 endpoints are:
 这只是一个授权服务器,为资源服务器提供安全服务
 
 
+#即是授权服务器又是资源服务器
+
+https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-secure-oauth2
+
+
+#资源服务器
+
+https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-secure-oauth2-resource
