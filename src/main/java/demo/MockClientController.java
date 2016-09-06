@@ -24,6 +24,7 @@ public class MockClientController {
 
     //第一步:获取授权码,客户端引导用户到资源服务器登录(比如点击'QQ登录'按钮)
     //http://localhost:8080/uaa/oauth/authorize?client_id=acme&response_type=code&state=teststate&redirect_uri=http://localhost:8080/uaa/authorize_callback
+    //http://localhost:8080/uaa/oauth/authorize?client_id=zero&response_type=code&redirect_uri=http://localhost:8080/uaa/authorize_callback
 
     //第二步:用户登录到资源服务器.
     //输入用户名密码等
@@ -39,8 +40,9 @@ public class MockClientController {
         System.out.println(code);
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.set("grant_type", "authorization_code");
-        form.set("client_id", "acme");
-        form.set("client_secret", "acmesecret");
+        //client(第三方应用)在AuthserverApplication.configure()中注册
+        form.set("client_id", "acme");//或者zero
+        form.set("client_secret", "acmesecret");//或者zerosecret
         form.set("code", code);
         form.set("redirect_uri", "http://localhost:8080/uaa/authorize_callback");//这个地址和获取授权码时提供的地址一致
 

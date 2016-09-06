@@ -88,9 +88,16 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+            //注册客户端(第三方应用)
             clients.inMemory()
                     .withClient("acme")//client_id
                     .secret("acmesecret")//client_secret
+                    .authorizedGrantTypes("authorization_code", "refresh_token",
+                            "password").scopes("openid");
+
+            clients.inMemory()
+                    .withClient("zero")//client_id
+                    .secret("zerosecret")//client_secret
                     .authorizedGrantTypes("authorization_code", "refresh_token",
                             "password").scopes("openid");
         }
@@ -107,7 +114,9 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
                 throws Exception {
             oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess(
                     "isAuthenticated()");
-            oauthServer.allowFormAuthenticationForClients();//默认是将client_id等附加在header中的,这里允许将client_id等在form中提交过来
+            //curl -H "Authorization: bearer [access_token]" localhost:8080/flights/1
+            //默认是将client_id等附加在header中的,这里允许将client_id等在form中提交过来
+            oauthServer.allowFormAuthenticationForClients();
         }
 
     }
