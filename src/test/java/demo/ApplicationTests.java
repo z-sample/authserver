@@ -54,8 +54,7 @@ public class ApplicationTests {
 
 	@Test
 	public void loginSucceeds() {
-		ResponseEntity<String> response = template.getForEntity("http://localhost:"
-				+ port + "/uaa/login", String.class);
+		ResponseEntity<String> response = template.getForEntity("http://localhost:" + port + "/uaa/login", String.class);
 		String csrf = getCsrf(response.getBody());
 		MultiValueMap<String, String> form = new LinkedMultiValueMap<String, String>();
 		form.set("username", "user");
@@ -64,11 +63,9 @@ public class ApplicationTests {
 		HttpHeaders headers = new HttpHeaders();
 		headers.put("COOKIE", response.getHeaders().get("Set-Cookie"));
 		RequestEntity<MultiValueMap<String, String>> request = new RequestEntity<MultiValueMap<String, String>>(
-				form, headers, HttpMethod.POST, URI.create("http://localhost:" + port
-						+ "/uaa/login"));
+				form, headers, HttpMethod.POST, URI.create("http://localhost:" + port + "/uaa/login"));
 		ResponseEntity<Void> location = template.exchange(request, Void.class);
-		assertEquals("http://localhost:" + port + "/uaa/",
-				location.getHeaders().getFirst("Location"));
+		assertEquals("http://localhost:" + port + "/uaa/", location.getHeaders().getFirst("Location"));
 	}
 
 	private String getCsrf(String soup) {

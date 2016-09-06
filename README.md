@@ -13,3 +13,9 @@ running on other ports on the root resource). OAuth2 endpoints are:
   OAuth2 spec). Can be used to decode a token remotely. Spring Cloud
   Security configures this in a client app as
   `oauth2.resource.tokenInfoUri`.
+
+#授权服务器
+
+这只是一个授权服务器,为资源服务器提供安全服务
+
+
