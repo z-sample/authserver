@@ -26,6 +26,8 @@ schema.sql:https://github.com/spring-projects/spring-security-oauth/blob/master/
 
 http://docs.spring.io/spring-security/site/docs/current/reference/html/appendix-schema.html
 
+http://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/
+
 ##即是授权服务器又是资源服务器
 
 https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-secure-oauth2
@@ -34,3 +36,8 @@ https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/s
 ##资源服务器
 
 https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-secure-oauth2-resource
+
+
+##其他
+
+https://spring.io/blog/2015/02/03/sso-with-oauth2-angular-js-and-spring-security-part-v

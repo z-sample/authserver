@@ -1,6 +1,7 @@
 package demo;
 
 import java.security.KeyPair;
+import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -11,10 +12,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -24,6 +28,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -48,6 +53,58 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
         registry.addViewController("/oauth/confirm_access").setViewName("authorize");
     }
 
+    /**
+     * <pre>
+     * {
+     *      "details": {
+     *          "remoteAddress": "0:0:0:0:0:0:0:1",
+     *          "sessionId": "5F74D9F2F9797CAF54E09577CB7EC62F"
+     *      },
+     *      "authorities": [
+     *          {
+     *              "authority": "ROLE_ADMIN"
+     *          },
+     *          {
+     *              "authority": "ROLE_USER"
+     *          }
+     *      ],
+     *      "authenticated": true,
+     *      "principal": {
+     *          "password": null,
+     *          "username": "user",
+     *          "authorities": [
+     *              {
+     *                  "authority": "ROLE_ADMIN"
+     *              },
+     *              {
+     *                  "authority": "ROLE_USER"
+     *              }
+     *          ],
+     *          "accountNonExpired": true,
+     *          "accountNonLocked": true,
+     *          "credentialsNonExpired": true,
+     *          "enabled": true
+     *      },
+     *      "credentials": null,
+     *      "name": "user"
+     * }
+     * </pre>
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/user", produces = "application/json")
+    public ResponseEntity<Principal> user(Principal user) {
+        return ResponseEntity.ok(user);
+    }
+
+    @RequestMapping(value = "/userinfo", produces = "application/json")
+    public ResponseEntity<?> userinfo(Principal user) {
+        //返回用户信息
+//      User userDetails = userRepository.findUserByName(user.getName());
+        return ResponseEntity.ok(null);
+    }
+
     //security 配置
     @Configuration
     @Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
@@ -65,6 +122,14 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.parentAuthenticationManager(authenticationManager);
+//            auth.inMemoryAuthentication().withUser("user2").password("password").roles("USER");
+
+//            auth
+//                    .jdbcAuthentication()
+//                    .dataSource(dataSource)
+//                    .withDefaultSchema()//Only HSQLDB database
+//                    .withUser("user").password("password").roles("USER").and()
+//                    .withUser("admin").password("password").roles("USER", "ADMIN");
         }
     }
 
@@ -111,7 +176,7 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 //            endpoints.userApprovalHandler()//TokenStoreUserApprovalHandlerTokenStore
             //TokenStore实现类:JwtTokenStore,RedisTokenStore,JdbcTokenStore,InMemoryTokenStore
 //            endpoints.tokenStore()//JwtTokenStore,
-            //UserDetailsService实现类:InMemoryUserDetailsManager,JdbcUserDetailsManager
+            //UserDetailsService实现类:InMemoryUserDetailsManager,JdbcUserDetailsManager 定义可登录的User,也就是平台的User
 //            endpoints.userDetailsService()//InMemoryUserDetailsManager ,debug createUser(UserDetails user)方法可以发现Spring创建了用户:{username:"user",password:"password"...}
         }
 
