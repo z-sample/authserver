@@ -78,6 +78,8 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 
         @Bean
         public JwtAccessTokenConverter jwtAccessTokenConverter() {
+            //JSON Web Token (JWT) 是一个自我认证的记号，能够包含用户标识、角色和用户权限等信息，能够被任何人方便解析和使用安全的key实现验证
+            //JsonWebTokenUtility
             JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
             KeyPair keyPair = new KeyStoreKeyFactory(
                     new ClassPathResource("keystore.jks"), "foobar".toCharArray())
@@ -92,14 +94,13 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
             clients.inMemory()
                     .withClient("acme")//client_id
                     .secret("acmesecret")//client_secret
-                    .authorizedGrantTypes("authorization_code", "refresh_token",
-                            "password").scopes("openid");
+                    .authorizedGrantTypes("authorization_code", "refresh_token", "password").scopes("openid")
 
-            clients.inMemory()
+                    .and()
                     .withClient("zero")//client_id
                     .secret("zerosecret")//client_secret
-                    .authorizedGrantTypes("authorization_code", "refresh_token",
-                            "password").scopes("openid");
+                    .authorizedGrantTypes("authorization_code", "refresh_token", "password").scopes("openid");
+
         }
 
         @Override
@@ -107,6 +108,11 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
                 throws Exception {
             endpoints.authenticationManager(authenticationManager).accessTokenConverter(
                     jwtAccessTokenConverter());
+//            endpoints.userApprovalHandler()//TokenStoreUserApprovalHandlerTokenStore
+            //TokenStore实现类:JwtTokenStore,RedisTokenStore,JdbcTokenStore,InMemoryTokenStore
+//            endpoints.tokenStore()//JwtTokenStore,
+            //UserDetailsService实现类:InMemoryUserDetailsManager,JdbcUserDetailsManager
+//            endpoints.userDetailsService()//InMemoryUserDetailsManager ,debug createUser(UserDetails user)方法可以发现Spring创建了用户:{username:"user",password:"password"...}
         }
 
         @Override
